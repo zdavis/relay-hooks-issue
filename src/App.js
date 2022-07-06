@@ -1,25 +1,31 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import { useQuery } from 'relay-hooks';
+import graphql from 'babel-plugin-relay/macro';
 
-function App() {
+const query = graphql`
+  query AppQuery {
+  launchesPast(limit: 10) {
+    mission_name
+    launch_date_local
+  }
+}
+`;
+
+function App(props) {
+  const {data, error, retry, isLoading} = useQuery(query);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      Is loading: {isLoading ? 'true' : 'false'}
     </div>
   );
 }
 
-export default App;
+function AppRoot(props) {
+  return (
+    <App />
+  );
+}
+
+export default AppRoot;
